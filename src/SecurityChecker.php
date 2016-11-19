@@ -9,7 +9,7 @@
  */
 namespace Swop\GitHub\WebHookSecurityChecker;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * This class will check if a given PSR-7 request coming from GitHub in a web hook context
@@ -33,11 +33,11 @@ class SecurityChecker
     /**
      * Checks is the request contains valid signature
      *
-     * @param ServerRequestInterface $request
+     * @param RequestInterface $request
      *
      * @return bool
      */
-    public function check(ServerRequestInterface $request)
+    public function check(RequestInterface $request)
     {
         $hubSignature = $request->getHeader('X-Hub-Signature');
 

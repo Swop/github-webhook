@@ -10,7 +10,7 @@
 
 namespace Swop\GitHub\WebHookSecurityChecker;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\RequestInterface;
 use Zend\Diactoros\ServerRequest;
 use Swop\GitHub\WebHookSecurityChecker\Fixtures\StringStream;
 
@@ -106,7 +106,7 @@ class SecurityCheckerTest extends \PHPUnit_Framework_TestCase
      * @param string $requestContent
      * @param string $requestSignature
      *
-     * @return ServerRequestInterface
+     * @return RequestInterface
      */
     private function createRequest($requestContent, $requestSignature)
     {
