@@ -117,7 +117,7 @@ class SecurityCheckerTest extends \PHPUnit_Framework_TestCase
         }
 
         return (new ServerRequest())
-            ->withAddedHeader('HTTP_X_Hub_Signature', $requestSignatureHeader)
+            ->withAddedHeader('X-Hub-Signature', $requestSignatureHeader)
             ->withBody(new StringStream($requestContent));
     }
 

@@ -39,7 +39,7 @@ class SecurityChecker
      */
     public function check(ServerRequestInterface $request)
     {
-        $hubSignature = $request->getHeader('HTTP_X_Hub_Signature');
+        $hubSignature = $request->getHeader('X-Hub-Signature');
 
         if (empty($hubSignature)) {
             return false;
