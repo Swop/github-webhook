@@ -12,7 +12,7 @@ namespace Swop\GitHub\WebHookSecurityChecker;
 
 use Psr\Http\Message\RequestInterface;
 use Zend\Diactoros\ServerRequest;
-use Swop\GitHub\WebHookSecurityChecker\Fixtures\StringStream;
+use Zend\Diactoros\Stream;
 
 /**
  * @author Sylvain Mauduit <sylvain@mauduit.fr>
@@ -116,9 +116,12 @@ class SecurityCheckerTest extends \PHPUnit_Framework_TestCase
             $requestSignatureHeader = [$requestSignature];
         }
 
+        $stream = new Stream('php://temp', 'wb+');
+        $stream->write($requestContent);
+
         return (new ServerRequest())
             ->withAddedHeader('X-Hub-Signature', $requestSignatureHeader)
-            ->withBody(new StringStream($requestContent));
+            ->withBody($stream);
     }
 
     /**
