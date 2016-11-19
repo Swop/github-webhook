@@ -28,4 +28,4 @@ install:
   - composer install --no-interaction --prefer-dist
 
 script:
-  - bin/phpunit --coverage-text
+  - vendor/bin/phpunit --coverage-text
