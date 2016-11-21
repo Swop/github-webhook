@@ -8,29 +8,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Swop\GitHub\WebHookSecurityChecker;
+namespace Swop\GitHubWebHook\Tests\Security;
 
 use Psr\Http\Message\RequestInterface;
+use Swop\GitHubWebHook\Security\SignatureValidator;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\Stream;
 
 /**
  * @author Sylvain Mauduit <sylvain@mauduit.fr>
  */
-class SecurityCheckerTest extends \PHPUnit_Framework_TestCase
+class SignatureValidatorTest extends \PHPUnit_Framework_TestCase
 {
     const SECRET = 'MyDirtySecret';
-
-    /** @var SecurityChecker */
-    private $securityChecker;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp()
-    {
-        $this->securityChecker = new SecurityChecker(self::SECRET);
-    }
 
     /**
      * @dataProvider correctSignatures
@@ -40,18 +30,19 @@ class SecurityCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCorrectSignature($requestBody, $signature)
     {
-        $this->assertTrue($this->securityChecker->check($this->createRequest($requestBody, $signature)));
+        (new SignatureValidator())->validate($this->createRequest($requestBody, $signature), self::SECRET);
     }
 
     /**
      * @dataProvider incorrectSignatures
+     * @expectedException \Swop\GitHubWebHook\Exception\InvalidGitHubRequestSignatureException
      *
      * @param string $requestBody
      * @param string $signature
      */
     public function testIncorrectSignature($requestBody, $signature)
     {
-        $this->assertFalse($this->securityChecker->check($this->createRequest($requestBody, $signature)));
+        (new SignatureValidator())->validate($this->createRequest($requestBody, $signature), self::SECRET);
     }
 
     public function correctSignatures()
@@ -63,11 +54,11 @@ class SecurityCheckerTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '{"foo": "bar"}',
-                $this->createSignature('{"foo": "bar"}', SecurityCheckerTest::SECRET, 'md5')
+                $this->createSignature('{"foo": "bar"}', SignatureValidatorTest::SECRET, 'md5')
             ],
             [
                 '{"foo": "bar", "baz": true}',
-                $this->createSignature('{"foo": "bar", "baz": true}', SecurityCheckerTest::SECRET, 'sha256')
+                $this->createSignature('{"foo": "bar", "baz": true}', SignatureValidatorTest::SECRET, 'sha256')
             ],
         ];
     }
@@ -131,7 +122,7 @@ class SecurityCheckerTest extends \PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    private function createSignature($signedContent, $secret = SecurityCheckerTest::SECRET, $algo = 'sha1')
+    private function createSignature($signedContent, $secret = SignatureValidatorTest::SECRET, $algo = 'sha1')
     {
         return sprintf('%s=%s', $algo, hash_hmac($algo, $signedContent, $secret));
     }

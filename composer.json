@@ -1,8 +1,8 @@
 {
-    "name": "swop/github-webhook-security-checker",
+    "name": "swop/github-webhook",
     "license": "MIT",
     "type": "library",
-    "description": "Security checker which will verify if the incoming GitHub web hook request is correctly signed.",
+    "description": "Library which deals with incoming GitHub web hooks requests (signature validation & payload parsing)",
     "keywords": [
         "github",
         "webhook",
@@ -16,7 +16,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4"
+        "php": ">=5.4",
+        "psr/http-message": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.5.0",
@@ -24,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Swop\\GitHub\\WebHookSecurityChecker\\": "src/"
+            "Swop\\GitHubWebHook\\": "src/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

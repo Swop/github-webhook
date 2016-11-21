@@ -5,8 +5,12 @@
     colors        = "true"
     bootstrap     = "tests/bootstrap.php" >
 
+    <php>
+        <ini name="error_reporting" value="-1" />
+    </php>
+
     <testsuites>
-        <testsuite name="GitHub Web Hook Security Checker Test Suite">
+        <testsuite name="GitHub Web Hook Test Suite">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
