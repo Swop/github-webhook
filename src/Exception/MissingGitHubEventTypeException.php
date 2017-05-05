@@ -16,7 +16,7 @@ use Psr\Http\Message\RequestInterface;
  *
  * @author Sylvain Mauduit <sylvain@mauduit.fr>
  */
-class MissingGitHubEventTypeException extends  GitHubWebHookException
+class MissingGitHubEventTypeException extends GitHubWebHookException
 {
     /**
      * @param RequestInterface $request
