@@ -64,7 +64,11 @@ class SignatureValidator implements SignatureValidatorInterface
             return false;
         }
 
-        $payloadHash = @hash_hmac($algorithm, $payload, $secret);
+        if (!in_array($algorithm, hash_algos())) {
+            return false;
+        }
+
+        $payloadHash = hash_hmac($algorithm, $payload, $secret);
 
         return $hash === $payloadHash;
     }

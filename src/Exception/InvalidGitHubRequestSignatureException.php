@@ -16,7 +16,7 @@ use Psr\Http\Message\RequestInterface;
  *
  * @author Sylvain Mauduit <sylvain@mauduit.fr>
  */
-class InvalidGitHubRequestSignatureException extends  GitHubWebHookException
+class InvalidGitHubRequestSignatureException extends GitHubWebHookException
 {
     /** @var string */
     private $signature;
