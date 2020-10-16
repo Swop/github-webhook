@@ -26,7 +26,7 @@ class SignatureValidator implements SignatureValidatorInterface
      */
     public function validate(RequestInterface $request, $secret)
     {
-        $signature   = $request->getHeader('X-Hub-Signature');
+        $signature   = $request->getHeader('X-Hub-Signature-256');
         $requestBody = $request->getBody();
         $requestBody->rewind();
 
