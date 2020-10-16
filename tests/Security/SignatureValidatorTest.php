@@ -111,7 +111,7 @@ class SignatureValidatorTest extends \PHPUnit_Framework_TestCase
         $stream->write($requestContent);
 
         return (new ServerRequest())
-            ->withAddedHeader('X-Hub-Signature', $requestSignatureHeader)
+            ->withAddedHeader('X-Hub-Signature-256', $requestSignatureHeader)
             ->withBody($stream);
     }
 
