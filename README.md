@@ -2,7 +2,7 @@ Github WebHook
 ==================
 
 [![Build
-Status](https://secure.travis-ci.org/Swop/github-webhook.png?branch=master)](http://travis-ci.org/Swop/github-webhook)
+Status](https://github.com/Swop/github-webhook/workflows/tests/badge.svg)](https://github.com/Swop/github-webhook/actions)
 
 This library offers a set of tools which could become handy when dealing with GitHub web hook requests.
 
