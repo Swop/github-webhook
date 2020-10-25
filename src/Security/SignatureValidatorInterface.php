@@ -28,5 +28,5 @@ interface SignatureValidatorInterface
      *
      * @throws InvalidGitHubRequestSignatureException
      */
-    public function validate(RequestInterface $request, $secret);
+    public function validate(RequestInterface $request, string $secret): void;
 }

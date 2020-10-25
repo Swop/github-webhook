@@ -23,7 +23,7 @@ class GitHubEventFactory implements GitHubEventFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function build($type, array $payload)
+    public function build($type, array $payload): GitHubEvent
     {
         return new GitHubEvent($type, $payload);
     }
@@ -31,7 +31,7 @@ class GitHubEventFactory implements GitHubEventFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function buildFromRequest(RequestInterface $request)
+    public function buildFromRequest(RequestInterface $request): GitHubEvent
     {
         $eventType = $request->getHeader('X-GitHub-Event');
 

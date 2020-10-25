@@ -21,32 +21,22 @@ abstract class GitHubWebHookException extends \Exception
     /** @var RequestInterface */
     private $request;
 
-    /**
-     * @param RequestInterface $request
-     * @param string           $message
-     * @param \Exception       $previous
-     */
-    public function __construct(RequestInterface $request, $message, \Exception $previous = null)
+    public function __construct(RequestInterface $request, string $message, ?\Throwable $previous = null)
     {
         $this->request = $request;
 
         parent::__construct($message, 0, $previous);
     }
 
-    /**
-     * @return RequestInterface
-     */
-    public function getRequest()
+    public function getRequest(): RequestInterface
     {
         return $this->request;
     }
 
     /**
      * Get the message to display in non-debug environments
-     *
-     * @return string
      */
-    public function getPublicMessage()
+    public function getPublicMessage(): string
     {
         return $this->getMessage();
     }

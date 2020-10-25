@@ -24,9 +24,9 @@ class SignatureValidator implements SignatureValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function validate(RequestInterface $request, $secret)
+    public function validate(RequestInterface $request, string $secret): void
     {
-        $signature   = $request->getHeader('X-Hub-Signature-256');
+        $signature = $this->getSignatureFromHeader($request);
         $requestBody = $request->getBody();
         $requestBody->rewind();
 
@@ -37,20 +37,18 @@ class SignatureValidator implements SignatureValidatorInterface
         }
     }
 
-    /**
-     * @param string $signature
-     * @param string $payload
-     * @param string $secret
-     *
-     * @return bool
-     */
-    private function validateSignature($signature, $payload, $secret)
+    private function getSignatureFromHeader(RequestInterface $request): ?string
     {
-        if (empty($signature)) {
+        $headerValues = $request->getHeader('X-Hub-Signature-256');
+
+        return empty($headerValues) ? null : current($headerValues);
+    }
+
+    private function validateSignature(?string $signature, string $payload, string $secret): bool
+    {
+        if (null === $signature) {
             return false;
         }
-
-        $signature = current($signature);
 
         $explodeResult = explode('=', $signature, 2);
 

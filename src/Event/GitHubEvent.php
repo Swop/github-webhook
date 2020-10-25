@@ -21,29 +21,18 @@ class GitHubEvent
     /** @var array */
     private $payload;
 
-    /**
-     * @param string $type
-     * @param array  $payload
-     */
-    public function __construct($type, array $payload)
+    public function __construct(string $type, array $payload)
     {
         $this->type    = $type;
         $this->payload = $payload;
     }
 
-
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return array
-     */
-    public function getPayload()
+    public function getPayload(): array
     {
         return $this->payload;
     }

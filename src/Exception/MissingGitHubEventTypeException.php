@@ -18,11 +18,7 @@ use Psr\Http\Message\RequestInterface;
  */
 class MissingGitHubEventTypeException extends GitHubWebHookException
 {
-    /**
-     * @param RequestInterface $request
-     * @param \Exception       $previous
-     */
-    public function __construct(RequestInterface $request, \Exception $previous = null)
+    public function __construct(RequestInterface $request, ?\Throwable $previous = null)
     {
         parent::__construct($request, 'A GitHub event type should be provided as a X-GitHub-Event header.', $previous);
     }

@@ -21,22 +21,14 @@ class InvalidGitHubRequestPayloadException extends GitHubWebHookException
     /** @var string */
     private $requestBody;
 
-    /**
-     * @param RequestInterface $request
-     * @param string           $requestBody
-     * @param \Exception       $previous
-     */
-    public function __construct(RequestInterface $request, $requestBody, \Exception $previous = null)
+    public function __construct(RequestInterface $request, string $requestBody, ?\Throwable $previous = null)
     {
         $this->requestBody = $requestBody;
 
         parent::__construct($request, 'Invalid GitHub request payload.', $previous);
     }
 
-    /**
-     * @return string
-     */
-    public function getRequestBody()
+    public function getRequestBody(): string
     {
         return $this->requestBody;
     }

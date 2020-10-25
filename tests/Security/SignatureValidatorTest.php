@@ -10,42 +10,47 @@
 
 namespace Swop\GitHubWebHook\Tests\Security;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
+use Swop\GitHubWebHook\Exception\InvalidGitHubRequestSignatureException;
 use Swop\GitHubWebHook\Security\SignatureValidator;
-use Zend\Diactoros\ServerRequest;
-use Zend\Diactoros\Stream;
+use Laminas\Diactoros\Request;
+use Laminas\Diactoros\Stream;
 
 /**
  * @author Sylvain Mauduit <sylvain@mauduit.fr>
  */
-class SignatureValidatorTest extends \PHPUnit_Framework_TestCase
+class SignatureValidatorTest extends TestCase
 {
     const SECRET = 'MyDirtySecret';
 
     /**
      * @dataProvider correctSignatures
-     *
-     * @param string $requestBody
-     * @param string $signature
      */
-    public function testCorrectSignature($requestBody, $signature)
+    public function testCorrectSignature(string $requestBody, string $signature)
     {
-        (new SignatureValidator())->validate($this->createRequest($requestBody, $signature), self::SECRET);
+        $valid = true;
+
+        try {
+            (new SignatureValidator())->validate($this->createRequest($requestBody, $signature), self::SECRET);
+        } catch (InvalidGitHubRequestSignatureException $e) {
+            $valid = false;
+        }
+
+        $this->assertTrue($valid);
     }
 
     /**
      * @dataProvider incorrectSignatures
-     * @expectedException \Swop\GitHubWebHook\Exception\InvalidGitHubRequestSignatureException
-     *
-     * @param string $requestBody
-     * @param string $signature
      */
-    public function testIncorrectSignature($requestBody, $signature)
+    public function testIncorrectSignature(string $requestBody, ?string $signature)
     {
+        $this->expectException(InvalidGitHubRequestSignatureException::class);
+
         (new SignatureValidator())->validate($this->createRequest($requestBody, $signature), self::SECRET);
     }
 
-    public function correctSignatures()
+    public function correctSignatures(): array
     {
         return [
             [
@@ -58,12 +63,16 @@ class SignatureValidatorTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 '{"foo": "bar", "baz": true}',
+                $this->createSignature('{"foo": "bar", "baz": true}', SignatureValidatorTest::SECRET, 'sha1')
+            ],
+            [
+                '{"foo": "bar", "baz": true}',
                 $this->createSignature('{"foo": "bar", "baz": true}', SignatureValidatorTest::SECRET, 'sha256')
             ],
         ];
     }
 
-    public function incorrectSignatures()
+    public function incorrectSignatures(): array
     {
         return [
             [
@@ -93,13 +102,12 @@ class SignatureValidatorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @param string $requestContent
-     * @param string $requestSignature
-     *
-     * @return RequestInterface
-     */
-    private function createRequest($requestContent, $requestSignature)
+    private function createSignature(string $signedContent, string $secret = SignatureValidatorTest::SECRET, string $algo = 'sha1'): string
+    {
+        return sprintf('%s=%s', $algo, hash_hmac($algo, $signedContent, $secret));
+    }
+
+    private function createRequest(string $requestContent, ?string $requestSignature): RequestInterface
     {
         if (null === $requestSignature) {
             $requestSignatureHeader = [];
@@ -110,20 +118,13 @@ class SignatureValidatorTest extends \PHPUnit_Framework_TestCase
         $stream = new Stream('php://temp', 'wb+');
         $stream->write($requestContent);
 
-        return (new ServerRequest())
-            ->withAddedHeader('X-Hub-Signature-256', $requestSignatureHeader)
+        $request = (new Request())
             ->withBody($stream);
-    }
 
-    /**
-     * @param string $algo
-     * @param string $signedContent
-     * @param string $secret
-     *
-     * @return string
-     */
-    private function createSignature($signedContent, $secret = SignatureValidatorTest::SECRET, $algo = 'sha1')
-    {
-        return sprintf('%s=%s', $algo, hash_hmac($algo, $signedContent, $secret));
+        if (!empty($requestSignatureHeader)) {
+            $request = $request->withAddedHeader('X-Hub-Signature-256', $requestSignatureHeader);
+        }
+
+        return $request;
     }
 }

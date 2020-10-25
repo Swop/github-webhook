@@ -18,25 +18,17 @@ use Psr\Http\Message\RequestInterface;
  */
 class InvalidGitHubRequestSignatureException extends GitHubWebHookException
 {
-    /** @var string */
+    /** @var ?string */
     private $signature;
 
-    /**
-     * @param RequestInterface $request
-     * @param string           $signature
-     * @param \Exception       $previous
-     */
-    public function __construct(RequestInterface $request, $signature, \Exception $previous = null)
+    public function __construct(RequestInterface $request, ?string $signature, ?\Throwable $previous = null)
     {
         $this->signature = $signature;
 
         parent::__construct($request, 'Invalid GitHub request signature.', $previous);
     }
 
-    /**
-     * @return string
-     */
-    public function getSignature()
+    public function getSignature(): string
     {
         return $this->signature;
     }

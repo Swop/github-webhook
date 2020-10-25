@@ -22,23 +22,14 @@ interface GitHubEventFactoryInterface
 {
     /**
      * Build a GitHub web hook event object depending on the given type/payload
-     *
-     * @param string $type
-     * @param array  $payload
-     *
-     * @return GitHubEvent
      */
-    public function build($type, array $payload);
+    public function build(string $type, array $payload): GitHubEvent;
 
     /**
      * Build a GitHub web hook event object based on the incoming request
      *
-     * @param RequestInterface $request
-     *
-     * @return GitHubEvent
-     *
      * @throws InvalidGitHubRequestPayloadException If the request payload is not a valid JSON content
      * @throws MissingGitHubEventTypeException If the GitHub event type could not be found in the request headers
      */
-    public function buildFromRequest(RequestInterface $request);
+    public function buildFromRequest(RequestInterface $request): GitHubEvent;
 }

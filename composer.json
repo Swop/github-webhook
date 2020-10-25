@@ -16,21 +16,23 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "psr/http-message": "^1.0"
+        "php": "^7.2",
+        "psr/http-message": "^1.0",
+        "ext-json": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.5.0",
-        "zendframework/zend-diactoros": "^1.3"
+        "phpunit/phpunit": "^8.0",
+        "laminas/laminas-diactoros": "^2.4"
     },
     "autoload": {
         "psr-4": {
-            "Swop\\GitHubWebHook\\": "src/"
+            "Swop\\GitHubWebHook\\": "src/",
+            "Swop\\GitHubWebHook\\Tests\\": "tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "3.0.x-dev"
         }
     }
 }
