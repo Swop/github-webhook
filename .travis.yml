@@ -26,4 +26,4 @@ install:
   - composer install --no-interaction --prefer-dist
 
 script:
-  - Swop\GitHubWebHook\Tests\Security\SignatureValidatorTest --coverage-text
+  - vendor/bin/phpunit --coverage-text
