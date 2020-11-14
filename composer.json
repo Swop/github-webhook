@@ -26,7 +26,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Swop\\GitHubWebHook\\": "src/",
+            "Swop\\GitHubWebHook\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Swop\\GitHubWebHook\\Tests\\": "tests/"
         }
     },
